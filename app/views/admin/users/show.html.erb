@@ -1,2 +1,5 @@
-<h1>Admin::Users#show</h1>
-<p>Find me in app/views/admin/users/show.html.erb</p>
+<h3><%=@user.full_name%></h3>
+<ul>
+<li>email: <%= @user.email%></li>
+<li>signed_up: <%= @user.created_at%></li>
+</ul>

@@ -1,9 +1,13 @@
 class Admin::UsersController < ApplicationController
   def index
-  	@users = User.all
+  	@users = User.all.page(params[:page]).per(3)
+    if current_user.is_admin == false
+      redirect_to movies_path, notice: "You are not an Admin"
+    end
   end
 
   def show
+  	@user = User.find(params[:id])
   end
 
   def new
@@ -12,7 +16,7 @@ class Admin::UsersController < ApplicationController
 
   def create
   	@user = User.new(user_params)
-  	@user.update(is_admin: 't')
+  	@user.update(is_admin: true)
     if @user.save
       session[:user_id] = @user.id
       redirect_to movies_path, notice: "Welcome aboard, #{@user.firstname}!"
