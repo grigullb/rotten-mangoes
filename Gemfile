@@ -28,6 +28,8 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem 'carrierwave'
 gem "kaminari"
+gem 'pry'
+gem 'rmagick'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
