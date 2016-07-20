@@ -24,8 +24,7 @@ class Movie < ActiveRecord::Base
     reviews.sum(:rating_out_of_ten) / reviews.size unless reviews.empty?
   end
 
-  scope :title, -> (title) { where("title LIKE ?", "%#{title}%") }
-  scope :director, -> (director) { where("director LIKE ?", "%#{director}%") }
+  scope :title, -> (term) { where("title LIKE ? OR director LIKE ?", "%#{term}%", "%#{term}%") }
   scope :less_than_90 ,-> { where("runtime_in_minutes < ?", 90)}
   scope :between_90_120 ,-> { where("runtime_in_minutes >= ? AND runtime_in_minutes <= ?", 90, 120)}
   scope :greater_than_120 ,-> { where("runtime_in_minutes > ?", 120)}

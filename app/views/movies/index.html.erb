@@ -3,12 +3,8 @@
 
 <%= form_tag movies_path, method: 'get' do |f|%>
   <p>
-  	Title:
-    <%= text_field_tag 'title', params[:title] %>
-  </p>
-  <p>
-  	Director: 
-    <%= text_field_tag 'director', params[:director] %>
+  	Search:
+    <%= text_field_tag 'search_term', params[:search_term] %>
   </p>
   <p>
   	Duration: 
