@@ -1,11 +1,33 @@
 class MoviesController < ApplicationController
-
   def index
-    if params[:title]
-      @movies = Movie.search(params[:title], params[:director], params[:duration])
+    @movies = Movie.all
+    if params[:title] && !params[:title].empty?
+        @movies = @movies.title(params[:title])
     else
-      @movies = Movie.all
+      @movies
     end
+
+    if params[:director] && !params[:director].empty?
+        @movies = @movies.director(params[:director])
+    else
+      @movies
+    end
+
+    if params[:duration] && !params[:duration].empty?
+      if params[:duration] == 'under 90'
+        @movies = @movies.less_than_90
+      end
+      if params[:duration] == 'Over 120'
+        @movies = @movies.greater_than_120
+      end
+       if params[:duration] == 'Between 90 and 120'
+        
+        @movies = @movies.between_90_120
+      end
+    else
+      @movies
+    end
+
   end
 
   def show
