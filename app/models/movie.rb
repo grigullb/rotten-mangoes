@@ -1,5 +1,5 @@
 class Movie < ActiveRecord::Base
-
+  # scope :less_than_90, -> (duration){ where("runtime_in_minutes < ?", duration) }
   has_many :reviews
   mount_uploader :image, ImageUploader
 
@@ -24,53 +24,11 @@ class Movie < ActiveRecord::Base
     reviews.sum(:rating_out_of_ten) / reviews.size unless reviews.empty?
   end
 
-  def self.search(search_title, search_director, search_duration)
-    search_string = ""
-    conditions = []
-    if !search_title.empty?
-      search_string = "title = ?"
-      conditions << search_title
-    end
-
-    if !search_director.empty?
-      if search_string.empty?
-        search_string = "director = ?"
-        conditions << search_director
-      else
-        search_string = search_string + " AND director = ?"
-        conditions << search_director
-      end
-    end
-
-     if !search_string.empty?
-        if search_duration == "under 90"
-         search_string = search_string + " AND runtime_in_minutes < ?"
-         conditions << 90
-        end
-        if search_duration == "Between 90 and 120"
-         search_string = search_string + " AND runtime_in_minutes >= ? AND runtime_in_minutes <= ?"
-         conditions << 90 << 120
-        end
-        if search_duration == "Over 120"
-         search_string = search_string + " AND runtime_in_minutes > ?"
-         conditions << 120
-        end
-     else
-      if search_duration == "under 90"
-         search_string = search_string + "runtime_in_minutes < ?"
-         conditions << 90
-        end
-        if search_duration == "Between 90 and 120"
-         search_string = search_string + "runtime_in_minutes >= ? AND runtime_in_minutes <= ?"
-         conditions << 90 << 120
-        end
-        if search_duration == "Over 120"
-         search_string = search_string + "runtime_in_minutes > ?"
-         conditions << 120
-        end
-     end
-    Movie.where(search_string, *conditions)
-  end
+  scope :title, -> (title) { where("title LIKE ?", "%#{title}%") }
+  scope :director, -> (director) { where("director LIKE ?", "%#{director}%") }
+  scope :less_than_90 ,-> { where("runtime_in_minutes < ?", 90)}
+  scope :between_90_120 ,-> { where("runtime_in_minutes >= ? AND runtime_in_minutes <= ?", 90, 120)}
+  scope :greater_than_120 ,-> { where("runtime_in_minutes > ?", 120)}
 
   protected
 
